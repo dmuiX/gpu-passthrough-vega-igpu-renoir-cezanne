@@ -22,6 +22,11 @@ Finally Figured Out how to make the iGPU run as a passthrough GPU!
   8. Luckily my mainboard has my gpu already on a separate iommu group, otherwise you would have to separate your iommu group with sth. like asm google it and you will find what I mean
   9. Find out how to extract your vbios rom and the hdmi audio rom from either the GPU or an UEFI update File. I did use this one here: https://winraid.level1techs.com/t/tool-guide-news-uefi-bios-updater-ubu/3035 called UBU-1.80 and a UEFI File
       Actually just extracted it and then used UBU.cmd which asked for my UEFI Update file.
+	then you need to convert it as well:
+	
+ 	https://github.com/isc30/ryzen-gpu-passthrough-proxmox?tab=readme-ov-file#configuring-the-gpu-in-the-windows-vm
+	https://github.com/isc30/ryzen-gpu-passthrough-proxmox/discussions/18#discussioncomment-8627679
+  	
   10. Add the vbios to the folder /usr/share/vgabios nothing else works for kvm under Debian!
   11. Add the PCIe Devices to your domain.xml and define the rom file:
      ```xml
