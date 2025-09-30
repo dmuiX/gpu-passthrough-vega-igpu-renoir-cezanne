@@ -3,6 +3,7 @@
 Finally Figured Out how to make the iGPU run as a passthrough GPU!
 
 here some one has describe what he had done to make it work:
+
 https://forum.proxmox.com/threads/amd-ryzen-5600g-igpu-code-43-error.138665/
 
 kind of followed these steps as well!
