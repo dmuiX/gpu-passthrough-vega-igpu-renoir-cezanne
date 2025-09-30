@@ -1,6 +1,11 @@
-# GPU Passthrough Vega iGPU on a Ryzen 3 4350 with VEGA 6 Renoir Architecture
+# GPU Passthrough Vega iGPU on a Ryzen 3 4350 with VEGA 6 Renoir Architecture or Any other Vega iGPU 5700G, 5600G
 
 Finally Figured Out how to make the iGPU run as a passthrough GPU!
+
+here some one has describe what he had done to make it work:
+https://forum.proxmox.com/threads/amd-ryzen-5600g-igpu-code-43-error.138665/
+
+kind of followed these steps as well!
 
 1. vendor-reset
   1. clone this repo: https://github.com/gnif/vendor-reset
