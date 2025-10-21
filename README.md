@@ -57,3 +57,8 @@ kind of followed these steps as well!
   13. install the amd drivers. actually for me the official ones from amd work!
   14. Well yeah if you follow this path you will have a working igpu passthrough
   15. 
+
+  another important step which was necessary for the 5700G:
+
+  adding a reset_gpu.bat script as logon
+  and a disable_gpu.bat script on shutdown/restart
