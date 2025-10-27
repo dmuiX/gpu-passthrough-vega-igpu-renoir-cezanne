@@ -26,16 +26,20 @@ kind of followed these steps as well!
   6. then add the module (its actually called vendor_reset not with -!) to the /etc/module
   7. Restart
   8. Luckily my mainboard has my gpu already on a separate iommu group, otherwise you would have to separate your iommu group with sth. like asm google it and you will find what I mean
-  9. Find out how to extract your vbios rom and the hdmi audio rom from either the GPU or an UEFI update File. I did use this one here: https://winraid.level1techs.com/t/tool-guide-news-uefi-bios-updater-ubu/3035 called UBU-1.80 and a UEFI File
+  9. Find out how to extract your vbios rom and the hdmi audio rom from either the GPU or an UEFI update File.
+     If you have the same cpu/gpu as me - 4350g or a 5700g - you can use the dat files from here.
+     1636 is the vega 6 of the 4350G and 1638 is the vega 8 of the 5700G.
+  	 both use the same audio device so the ATIAudioDevice_AA01.rom file for the HDMI audio device can be used for both!
+     IMPORTANT: You must include the audio device otherwise the passthrough will end as the famous error 43.
+
+	 To extract my files from the bios update file: 
+     I did use this one here: https://winraid.level1techs.com/t/tool-guide-news-uefi-bios-updater-ubu/3035 called UBU-1.80 and a UEFI File
       Actually just extracted it and then used UBU.cmd which asked for my UEFI Update file.
 	then you need to convert it as well:
 	
  	https://github.com/isc30/ryzen-gpu-passthrough-proxmox?tab=readme-ov-file#configuring-the-gpu-in-the-windows-vm
 	https://github.com/isc30/ryzen-gpu-passthrough-proxmox/discussions/18#discussioncomment-8627679
 
-  if you have the same cpu/gpu as me: a 4350g or a 5700g you can use the dat files here. 1636 is the vega 6 of the 4350G and 1638 is the vega 8 of the 5700G
-  both use the same audio device so the ATIAudioDevice_AA01.rom file for the HDMI audio device can be used for both!
-  IMPORTANT: You must include the audio device otherwise the passthrough will end as the famous error 43. 
   10. Add the vbios to the folder /usr/share/vgabios nothing else works for kvm under Debian!
   11. Add the PCIe Devices to your domain.xml and define the rom file:
      ```xml
