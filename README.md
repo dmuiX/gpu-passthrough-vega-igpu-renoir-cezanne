@@ -8,7 +8,7 @@ https://forum.proxmox.com/threads/amd-ryzen-5600g-igpu-code-43-error.138665/
 
 kind of followed these steps as well!
 
-1. vendor-reset
+### vendor-reset
   1. clone this repo: https://github.com/gnif/vendor-reset
   2. find out the vendor id: lspci -nkk
   3. add your one (renoir is 1636, cezanne is 1638) to the src/device-db.h file in the vendor-reset folder under AMD_NAVI10:
@@ -25,9 +25,10 @@ kind of followed these steps as well!
        #include <linux/unaligned.h>
   6. then add the module (its actually called vendor_reset not with -!) to the /etc/module
   7. Restart
-2. IOMMU: Luckily my mainboard has my gpu already on a separate iommu group, otherwise you would have to separate your iommu group with sth. like asm google it and you will find what I mean
-3. For me no grub options were necesssary as my system - a headless debian 12 server with omv installed - seems to diasble the gpu on the host automatically.
-4. vga-bios:
+### IOMMU and grub
+1. Luckily my mainboard has my gpu already on a separate iommu group, otherwise you would have to separate your iommu group with sth. like asm google it and you will find what I mean
+2. For me no further grub options were necesssary as my system - a headless debian 12 server with omv installed - seems to diasble the gpu on the host automatically.
+### vga-bios:
    1. Find out how to extract your vbios rom and the hdmi audio rom from either the GPU or an UEFI update File.
       
    If you have the same cpu as me - 4350g or a 5700g - you can use the dat files from here.
@@ -48,23 +49,25 @@ kind of followed these steps as well!
   2. Add the vbios to the folder /usr/share/vgabios nothing else works for kvm under Debian!
   3. Add the PCIe Devices to your domain.xml and define the rom file:
      ```xml
-     <hostdev mode="subsystem" type="pci" managed="yes">
-      <source>
-        <address domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
-      </source>
-      <rom file="/usr/share/vgabios/vbios_1636.dat"/>
-      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="pci" managed="yes">
-      <driver name="vfio"/>
-      <source>
-        <address domain="0x0000" bus="0x06" slot="0x00" function="0x1"/>
-      </source>
-      <rom file="/usr/share/vgabios/ATIAudioDevice_AA01.rom"/>
-      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
-    </hostdev>
+	     <hostdev mode="subsystem" type="pci" managed="yes">
+	      <source>
+	        <address domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+	      </source>
+	      <rom file="/usr/share/vgabios/vbios_1636.dat"/>
+	      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
+	    </hostdev>
+	    <hostdev mode="subsystem" type="pci" managed="yes">
+	      <driver name="vfio"/>
+	      <source>
+	        <address domain="0x0000" bus="0x06" slot="0x00" function="0x1"/>
+	      </source>
+	      <rom file="/usr/share/vgabios/ATIAudioDevice_AA01.rom"/>
+	      <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
+	    </hostdev>
     ```
-3. other options in the xml file: UEFI is Necessary! So you need to configure the vm to use uefi and secure boot as well.
+### other options in the xml file
+
+1. UEFI is Necessary! So you need to configure the vm to use uefi and secure boot as well.
    Although I suppose when you create a Win11 VM with virt-manager it will activate this stuff automatically.
    
    ```xml
@@ -80,7 +83,7 @@ kind of followed these steps as well!
    </os>
    ```
 
-   Actually have activated a ton of other options of kvm unsure which ones are really necessary for windows to work.
+2. Actually have activated a ton of other options of kvm unsure which ones are really necessary for windows to work.
    dont want to test anymore so I will laeve it like that for now:
 	
    ```xml
@@ -109,12 +112,13 @@ kind of followed these steps as well!
 	    <ioapic driver='qemu'/>
 	  </features>
    ```
-5. When you have booted to windows On windows: install the amd drivers. actually for me the official ones from amd work!
+### boot into windows
+When you have booted to windows install the amd drivers. actually for me the official ones from amd work! have downloaded them manually but I suppso the automatic detection of windows myght work es well
 
-Well yeah if you follow this path you will have a working igpu passthrough.
-At least for one boot: 
+### Celebrate
+You have sucessfully implemented a working igpu passthrough, which many say is immpossible :D. 
 
-  ## Additional step (necessary for the 5700G but not for the 4350G!):
+### Somtimes another stepp is necessary - was the case for the 5700G, the 4350G did work without it!
 
   1. adding a reset_gpu.bat script as logon
   2. and a disable_gpu.bat script on shutdown/restart
